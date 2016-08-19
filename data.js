@@ -44,6 +44,20 @@ class DataObject {
       })
     });
   }
+
+  update(id, object) {
+    return new Promise((resolve, reject) => {
+      this.data.update(
+        {_id: mongojs.ObjectId(id)},
+        object,
+        (err, document) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(document);
+        })
+    });
+  }
 }
 
 const Deployment = new DataObject(db.Deployments);

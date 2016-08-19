@@ -1,3 +1,28 @@
-<h1>Deployment</h1>
+<h1>{{deploymentName}}</h1>
 
-<p>{{deploymentId}}</p>
+<ul class="nav nav-tabs deployment-step-tabs">
+  <li class="active"><a href="#">Deployment Settings</a></li>
+  <li><a href="#">Add Step</a></li>
+  <li><a href="#">Review</a></li>
+</ul>
+
+<form class="form-horizontal" action="/deployments/{{deployment._id}}?_method=PUT" method="POST">
+  <div class="form-group">
+    <label class="col-sm-2 col-md-1 control-label" for="deploymentName">Name</label>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <input type="text" id="deploymentName" class="form-control" name="name" value="{{deployment.name}}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 col-md-1 control-label" for="deploymentDescription">Description</label>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <input type="text" id="deploymentDescription" class="form-control" name="description" value="{{deployment.description}}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10 col-md-offset-1 col-md-4">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>

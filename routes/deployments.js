@@ -14,7 +14,10 @@ router.get('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
   Deployment.find(req.params.id).then((deployment) => {
-    res.render('deployments/show', { deploymentId: deployment._id.toString() });
+    res.render('deployments/show', {
+      deploymentName: deployment.name || 'New Deployment',
+      deployment: deployment
+    });
   }).catch(error => {
     res.status(500);
   })
@@ -23,6 +26,14 @@ router.get('/:id', function(req, res, next) {
 router.post('/', function(req, res, next){
   Deployment.insert({status: 'new'}).then(deployment => {
     res.redirect(`${deployment._id.toString()}`);
+  }).catch(error => {
+    res.status(500);
+  });
+});
+
+router.put('/:id', function(req, res, next){
+  Deployment.update(req.params.id, req.body).then(deployment => {
+    res.redirect(req.params.id);
   }).catch(error => {
     res.status(500);
   });
