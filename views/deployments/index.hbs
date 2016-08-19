@@ -1,0 +1,40 @@
+<div class="row header-bar">
+  <div class="col-xs-6">
+    <h1>Deployments</h1>
+  </div>
+  <div class="col-xs-6">
+    <div class="new-deployment-button pull-right">
+      <form action="/deployments/" method="POST" enctype="multipart/form-data">
+        <button type="submit" class="btn btn-success top-action-button"> New Deployment</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <table class="table table-striped table-bordered deployments-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Deployment Name</th>
+        <th>Products</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>Test</td>
+        <td>RHV, CFME, OSP, CFME</td>
+        <td>Complete</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Test 2</td>
+        <td>RHV, OSE</td>
+        <td>In Progress</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
