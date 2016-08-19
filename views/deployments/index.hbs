@@ -22,18 +22,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>1</td>
-        <td>Test</td>
-        <td>RHV, CFME, OSP, CFME</td>
-        <td>Complete</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Test 2</td>
-        <td>RHV, OSE</td>
-        <td>In Progress</td>
-      </tr>
+      {{#each deployments as |deployment|}}
+        <tr>
+          <td><a href="/deployments/{{deployment._id}}">{{deployment._id}}</a></td>
+          <td>{{depoyment.name}}</td>
+          <td>{{deployment.products}}</td>
+          <td>{{deployment.status}}</td>
+        </tr>
+      {{/each}}
       </tbody>
     </table>
   </div>

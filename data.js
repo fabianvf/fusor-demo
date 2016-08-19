@@ -6,17 +6,32 @@ class DataObject {
     this.data = data;
   }
 
-  find(id) {
+  getAll() {
     return new Promise((resolve, reject) => {
-      this.data.findOne({
-        _id: mongojs.ObjectId(id)
-      }, (err, document) => {
+      this.data.find((err, documents) => {
         if (err) {
           return reject(err);
         }
-        return resolve(document);
+        return resolve(documents);
       });
     });
+  }
+
+  find(id) {
+    if (!id) {
+      return this.getAll();
+    } else {
+      return new Promise((resolve, reject) => {
+        this.data.findOne({
+          _id: mongojs.ObjectId(id)
+        }, (err, document) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(document);
+        });
+      });
+    }
   }
 
   insert(object) {

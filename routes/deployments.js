@@ -4,7 +4,12 @@ const Deployment = require('../data').Deployment;
 
 /* GET deployments listing. */
 router.get('/', function(req, res, next) {
-  res.render('deployments/index', { });
+  Deployment.find().then((deployments) => {
+    console.log(deployments);
+    res.render('deployments/index', {deployments});
+  }).catch(error => {
+    res.status(500);
+  });
 });
 
 router.get('/:id', function(req, res, next) {
@@ -16,7 +21,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next){
-  Deployment.insert({}).then(deployment => {
+  Deployment.insert({status: 'new'}).then(deployment => {
     res.redirect(`${deployment._id.toString()}`);
   }).catch(error => {
     res.status(500);
