@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "live": "browser-sync start --proxy 'localhost:3000' --reload-delay 1000 --files './**/*.hbs,./**/*.js,./**/*.css'"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -16,6 +17,7 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.14.0",
     "nodemon": "^1.10.2"
   }
 }
