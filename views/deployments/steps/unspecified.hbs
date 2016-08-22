@@ -1,0 +1,17 @@
+<h1>{{deploymentName}}</h1>
+
+<ul class="nav nav-tabs deployment-step-tabs">
+  <li><a href="/deployments/{{deployment._id}}">Deployment Settings</a></li>
+  {{#each formattedSteps as |step|}}
+    {{#if step.current}}
+      <li class="step-link active"><a href="/deployments/{{step.deploymentId}}/steps/{{step.humanIndex}}">Step {{step.humanIndex}}</a></li>
+    {{else}}
+      <li class="step-link"><a href="/deployments/{{step.deploymentId}}/steps/{{step.humanIndex}}">Step {{step.humanIndex}}</a></li>
+    {{/if}}
+  {{/each}}
+
+  <li class="add-step-link"><a href="#">Add Step</a></li>
+  <li class="review-link"><a href="/deployments/{{deployment._id}}/review">Review</a></li>
+</ul>
+
+<div id="deploymentStepClient" class="deployment-step-client"><h1>Step {{humanStepIndex}} Single Page Application</h1></div>

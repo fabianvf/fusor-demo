@@ -1,9 +1,13 @@
 <h1>{{deploymentName}}</h1>
 
 <ul class="nav nav-tabs deployment-step-tabs">
-  <li class="active"><a href="#">Deployment Settings</a></li>
-  <li><a href="#">Add Step</a></li>
-  <li><a href="#">Review</a></li>
+  <li class="active"><a href="/deployments/{{deployment._id}}">Deployment Settings</a></li>
+  {{#each formattedSteps as |step|}}
+    <li class="step-link"><a href="/deployments/{{step.deploymentId}}/steps/{{step.humanIndex}}">Step {{step.humanIndex}}</a></li>
+  {{/each}}
+
+  <li class="add-step-link"><a href="#">Add Step</a></li>
+  <li class="review-link"><a href="/deployments/{{deployment._id}}/review">Review</a></li>
 </ul>
 
 <form class="form-horizontal" action="/deployments/{{deployment._id}}?_method=PUT" method="POST">
