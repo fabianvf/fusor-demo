@@ -1,3 +1,1 @@
-$(document).ready(function () {
-  $('.selectpicker').selectpicker();
-});
+../../../../lib/deployment-step/unspecified/unspecified-client.js
