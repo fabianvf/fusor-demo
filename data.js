@@ -1,5 +1,6 @@
 const mongojs = require('mongojs');
-var db = mongojs('mongodb://localhost:27017/fusor-demo', ['Deployments', 'DeploymentSteps']);
+var db = mongojs('mongodb://localhost:27017/fusor-demo', ['Deployments']);
+//TODO break out the steps into it's own collection and use Mongoose.
 
 class DataObject {
   constructor(data) {
@@ -61,7 +62,6 @@ class DataObject {
 }
 
 const Deployment = new DataObject(db.Deployments);
-const DeploymentStep = new DataObject(db.DeploymentSteps);
 
 
-module.exports = {Deployment, DeploymentStep};
+module.exports = {Deployment};
