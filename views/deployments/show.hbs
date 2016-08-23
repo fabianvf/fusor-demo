@@ -3,7 +3,7 @@
 <ul class="nav nav-tabs deployment-step-tabs">
   <li class="active"><a href="/deployments/{{deployment._id}}">Deployment Settings</a></li>
   {{#each formattedSteps as |step|}}
-    <li class="step-link"><a href="/deployments/{{step.deploymentId}}/steps/{{step.humanIndex}}">Step {{step.humanIndex}}</a></li>
+    <li class="step-link"><a href="/deployments/{{step.deploymentId}}/steps/{{step.humanIndex}}">{{step.tabName}}</a></li>
   {{/each}}
 
   <li class="add-step-link"><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a></li>
