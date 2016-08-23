@@ -85,20 +85,35 @@ router.get('/:id/steps/:humanStepIndex', function(req, res, next) {
     }
 
     let currentStep = deployment.steps[humanStepIndex - 1];
-    let template = `deployments/steps/${currentStep.type}`;
-    scripts.push(`/deployments/steps/${currentStep.type}.js`);
+    scripts.push(`/deployments/steps/${currentStep.type}-client.js`);
     let formattedSteps = deployment.steps.map((step, index) => formatStep(step, index, deployment, humanStepIndex));
 
-    res.render(template, {
+    res.render('deployments/steps/show', {
+      isUnspecified: !currentStep.type || currentStep.type === 'unspecified',
       deploymentName: deployment.name || 'New Deployment',
       deployment: deployment,
       formattedSteps: formattedSteps,
+      currentStep: currentStep,
       humanStepIndex: humanStepIndex,
       styles: styles,
       scripts: scripts
     });
   }).catch(error => {
     res.status(500).send(JSON.stringify(error));
+  })
+});
+
+router.put('/:id/steps/:humanStepIndex', function(req, res, next) {
+  const deploymentId = req.params.id;
+  const humanStepIndex = parseInt(req.params.humanStepIndex, 10);
+  Deployment.find(req.params.id).then((deployment) => {
+    let currentStep = deployment.steps[humanStepIndex - 1];
+    currentStep.type = req.body.type;
+    return Deployment.update(deploymentId, deployment);
+  }).then(result => {
+    return res.redirect(humanStepIndex);
+  }).catch(error => {
+    return res.status(500).send(JSON.stringify(error));
   })
 });
 
@@ -123,8 +138,27 @@ function formatStep(step, index, deployment, humanStepIndex) {
 
   formattedStep.deploymentId = deployment._id;
   formattedStep.humanIndex = index + 1;
-  formattedStep.current = humanStepIndex == formattedStep.humanIndex;
+  formattedStep.current = humanStepIndex === formattedStep.humanIndex;
+  formattedStep.tabName = getTabName(formattedStep);
   return formattedStep;
 }
+
+function getTabName(formattedStep) {
+  switch (formattedStep.type) {
+    case 'subscription':
+      return 'Subscriptions';
+    case 'host':
+      return 'Hosts';
+    case 'rhv':
+      return 'RHV';
+    case 'openstack':
+      return 'OpenStack';
+    case 'openshift':
+      return 'OpenShift';
+    case 'cfme':
+      return 'CloudForms';
+    default:
+      return `Step ${formattedStep.humanIndex}`;
+  }}
 
 module.exports = router;
