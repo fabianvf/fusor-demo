@@ -13,7 +13,7 @@ router.get('/:id/review', function(req, res, next) {
       deploymentName: deployment.name || 'New Deployment',
       deployment: deployment,
       formattedSteps: formattedSteps,
-      scripts: ['tabs.js']
+      scripts: ['tabs.js', 'review.js']
     });
   }).catch(error => {
     return res.status(500).send(JSON.stringify(error));
