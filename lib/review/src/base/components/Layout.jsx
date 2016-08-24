@@ -12,11 +12,24 @@ import {
 } from 'react-bootstrap';
 
 class Layout extends React.Component {
+  componentDidMount() {
+    // Bootstraps initial load if this is a first mount
+    const { deployment } = this.props;
+
+    if(deployment.initialId) {
+      this.props.bootstrapDeployment(deployment.initialId);
+    }
+  }
+
   render() {
     const { deployment, execute } = this.props;
 
-    const content = deployment.isStarted ?
-      <Tasks /> : <ReviewDetails detailCount={20} />
+    let content = <h3>Loading...</h3>; // TODO: Load is so fast...what to do?
+
+    if(!deployment.initialId) {
+      content = deployment.status === 'started' ?
+        <Tasks /> : <ReviewDetails deployment={deployment} />
+    }
 
     return (
       <div>
@@ -48,6 +61,9 @@ export default connect(
     return {
       execute: () => {
         dispatch(actions.deployment.execute());
+      },
+      bootstrapDeployment: (initialId) => {
+        dispatch(actions.deployment.bootstrap(initialId))
       }
     };
   }

@@ -60,26 +60,29 @@ import './shared/styles/review.scss';
 
 //promiseMiddleware(), socketMiddleware(socket), loggerMiddleware())
 
-////////////////////////////////////////////////////////////
-// Store Setup
-////////////////////////////////////////////////////////////
-
-const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    promiseMiddleware(), loggerMiddleware())
-);
-
-////////////////////////////////////////////////////////////
-// React Setup
-////////////////////////////////////////////////////////////
-
-const app =
-  <Provider store={store}>
-    <Layout />
-  </Provider>
 
 $(() => {
+  const idRegex = /deployments\/+([a-z0-9]+)\/+review/;
+  const match = idRegex.exec(document.location.pathname);
+
+  if(match.length < 2) {
+    throw 'ERROR: Something went bad trying to get the deployment ID from the pathname';
+  }
+
+  const initialDeploymentId = match[1];
+  console.debug('Loading deployment -> ', initialDeploymentId);
+
+  const store = createStore(
+    rootReducer(initialDeploymentId),
+    applyMiddleware(
+      promiseMiddleware(), loggerMiddleware())
+  );
+
+  const app =
+    <Provider store={store}>
+      <Layout />
+    </Provider>
+
   const mountPoint = document.getElementById('reviewStepClient');
   ReactDOM.render(app, mountPoint);
 });
