@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Deployment = require('../data').Deployment;
+const DeploymentExecutor = require('../lib/deployment-executor');
 
 router.get('/:id/review', function(req, res, next) {
   Deployment.find(req.params.id).then(deployment => {
@@ -21,10 +22,19 @@ router.get('/:id/review', function(req, res, next) {
 });
 
 router.post('/:id/execute', function(req, res, next) {
+  const io = require('../socket-client').getConnection();
+  const executor = new DeploymentExecutor(io);
+
   Deployment.find(req.params.id).then(deployment => {
     console.log('executing...', deployment._id);
-    res.status(200);
-    res.json({foo: deployment._id})
+
+    const runningDeployment = executor.executeDeployment(deployment);
+    if(!runningDeployment) {
+      throw { error: 'Something went wrong starting the deployment.' };
+    }
+
+    res.status(201);
+    res.json({deployment: runningDeployment})
   }).catch(error => {
     return res.status(500).send(JSON.stringify(error));
   })
@@ -46,6 +56,7 @@ router.get('/:id/steps/:humanStepIndex', function(req, res, next) {
     return res.render('deployments/steps/show', {
       isUnspecified: !currentStep.type || currentStep.type === 'unspecified',
       deploymentName: deployment.name || 'New Deployment',
+
       deployment: deployment,
       formattedSteps: formattedSteps,
       currentStep: currentStep,
