@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ReviewDetails from '../../ReviewDetails';
 import Tasks from '../../Tasks';
+import DeploymentDone from '../../DeploymentDone';
 import actions from '../../actions';
 
 import {
@@ -28,8 +29,19 @@ class Layout extends React.Component {
     let content = <h3>Loading...</h3>; // TODO: Load is so fast...what to do?
 
     if(!deployment.initialId) {
-      content = deployment.status === 'started' ?
-        <Tasks /> : <ReviewDetails deployment={deployment} />
+      switch(deployment.status) {
+        case 'new':
+          content = <ReviewDetails deployment={deployment} />
+          break;
+        case 'started':
+          content = <Tasks />
+          break;
+        case 'done':
+          content = <DeploymentDone />
+          break;
+        default:
+          content = (<p>Unrecognized status...</p>);
+      }
     }
 
     return (
