@@ -23,6 +23,7 @@ class Layout extends React.Component {
 
   render() {
     const { deployment, execute } = this.props;
+    const curry = execute.bind(this, deployment._id);
 
     let content = <h3>Loading...</h3>; // TODO: Load is so fast...what to do?
 
@@ -42,7 +43,7 @@ class Layout extends React.Component {
                 {content}
               </div>
 
-              <Button className="execute" bsSize="large" bsStyle="primary" onClick={execute}>Execute</Button>
+              <Button className="execute" bsSize="large" bsStyle="primary" onClick={curry}>Execute</Button>
             </Jumbotron>
           </Col>
         </Row>
@@ -59,8 +60,8 @@ export default connect(
   },
   (dispatch) => {
     return {
-      execute: () => {
-        dispatch(actions.deployment.execute());
+      execute: (deploymentId) => {
+        dispatch(actions.deployment.execute(deploymentId));
       },
       bootstrapDeployment: (initialId) => {
         dispatch(actions.deployment.bootstrap(initialId))
