@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ReviewDetail from './ReviewDetail';
-import faker from 'faker';
 
 class ReviewDetails extends React.Component {
   render() {
