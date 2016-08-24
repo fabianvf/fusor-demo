@@ -1,12 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import loggerMiddleware from 'redux-logger';
 import promiseMiddleware from 'redux-promise-middleware';
-import { Provider } from 'react-redux';
-import { combineReducers } from 'redux';
-import tasksReducer from './tasks/reducer';
 import Layout from './base/components/Layout';
+import rootReducer from './reducers';
 
 import './shared/styles/review.scss';
 
@@ -64,10 +63,6 @@ import './shared/styles/review.scss';
 ////////////////////////////////////////////////////////////
 // Store Setup
 ////////////////////////////////////////////////////////////
-const defaultState = {};
-const rootReducer = combineReducers({
-  foo: (state=defaultState, action) => state
-});
 
 const store = createStore(
   rootReducer,
