@@ -20,6 +20,16 @@ router.get('/:id/review', function(req, res, next) {
   })
 });
 
+router.post('/:id/execute', function(req, res, next) {
+  Deployment.find(req.params.id).then(deployment => {
+    console.log('executing...', deployment._id);
+    res.status(200);
+    res.json({foo: deployment._id})
+  }).catch(error => {
+    return res.status(500).send(JSON.stringify(error));
+  })
+});
+
 router.get('/:id/steps/:humanStepIndex', function(req, res, next) {
   const humanStepIndex = parseInt(req.params.humanStepIndex, 10);
   let scripts = ['tabs.js'];
