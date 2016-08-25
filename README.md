@@ -1,6 +1,6 @@
 # fusor-demo
 
-Install node.js version 6.4
+Install node.js version 6.4.
 [nvm](https://github.com/creationix/nvm) is one easy way to accomplish this:
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.6/install.sh | bash
