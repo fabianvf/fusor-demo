@@ -23,24 +23,24 @@ class Layout extends React.Component {
   }
 
   render() {
-    const { deployment, execute } = this.props;
-    const curry = execute.bind(this, deployment._id);
+    const { deployment, execute, reset } = this.props;
+    const execCurry = execute.bind(this, deployment._id);
+    const resetCurry = reset.bind(this, deployment._id);
 
-    let content = <h3>Loading...</h3>; // TODO: Load is so fast...what to do?
-
+    let content;
     if(!deployment.initialId) {
       switch(deployment.status) {
         case 'new':
           content = <ReviewDetails deployment={deployment} />
           break;
         case 'started':
-          content = <Tasks />
+          content = <Tasks deploymentSteps={deployment.steps}/>
           break;
         case 'done':
           content = <DeploymentDone />
           break;
         default:
-          content = (<p>Unrecognized status...</p>);
+          content = <p>Unrecognized status...</p>;
       }
     }
 
@@ -54,9 +54,15 @@ class Layout extends React.Component {
               <div style={{border: '2px solid #AAA', padding: '20px'}}>
                 {content}
               </div>
-
-              <Button className="execute" bsSize="large" bsStyle="primary" onClick={curry}>Execute</Button>
             </Jumbotron>
+
+            {(() => {
+              if(deployment.status === 'new') {
+                return <Button className="execute" bsSize="large" bsStyle="primary" onClick={execCurry}>Execute</Button>
+              } else if(deployment.status === 'done')
+                return <Button className="reset" bsSize="large" bsStyle="secondary" onClick={resetCurry}>Reset</Button>
+            })()}
+
           </Col>
         </Row>
       </div>
@@ -74,6 +80,9 @@ export default connect(
     return {
       execute: (deploymentId) => {
         dispatch(actions.deployment.execute(deploymentId));
+      },
+      reset: (deploymentId) => {
+        dispatch(actions.deployment.reset(deploymentId));
       },
       bootstrapDeployment: (initialId) => {
         dispatch(actions.deployment.bootstrap(initialId))

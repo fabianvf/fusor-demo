@@ -4,6 +4,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import loggerMiddleware from 'redux-logger';
 import promiseMiddleware from 'redux-promise-middleware';
+import socketMiddleware from './socket-middleware';
 import Layout from './base/components/Layout';
 import rootReducer from './reducers';
 
@@ -15,51 +16,6 @@ import './shared/styles/review.scss';
 import io from 'socket.io-client';
 const socket = io();
 
-//socket.on('message', (msg) => console.log('got message -> ', msg));
-//const socketMiddleware = socket => store => next => action => {
-  //const rx = /^([a-z]*?).([A-Z]*?)_FULFILLED/;
-  //const match = rx.exec(action.type);
-  //const isFulfilledPromise = !!match;
-
-  //const socketMeta = action.meta && action.meta.socket;
-
-  //// TODO: Explicit subscribe/unsubscribe handlers?
-  ////if(action.type === 'SOCKET_SUB') {
-  ////} else if(action.type === 'SOCKET_UNSUB') {
-  ////}
-
-  //// Can attach a socket action to a CRUD operation
-  //if(isFulfilledPromise && socketMeta) {
-    //const type = socketMeta.type;
-    //const modelName = match[1];
-    //const model = action.payload.data[modelName];
-
-    //if(type === 'sub') {
-      //socket.on(channel(modelName, model.id), (data) => {
-        //// Update store with new data
-        //const progress = data[modelName].progress;
-        //store.dispatch({
-          //type: socketMeta.updateAction,
-          //payload: data[modelName]
-        //})
-      //});
-    //} else if(type === 'unsub'){
-      //console.debug('unsubbing promise?');
-    //} else {
-      //throw 'ERROR: Unsupported socket action'
-    //}
-  //}
-
-  //// No socket action, pass through
-  //return next(action);
-//}
-
-//function channel(modelName, modelId) {
-  //return `/${modelName}/${modelId}`;
-//}
-
-//promiseMiddleware(), socketMiddleware(socket), loggerMiddleware())
-
 const idRegex = /deployments\/+([a-z0-9]+)\/+review/;
 const match = idRegex.exec(document.location.pathname);
 
@@ -68,17 +24,11 @@ if(match.length < 2) {
 }
 
 const initialDeploymentId = match[1];
-console.debug('Loading deployment -> ', initialDeploymentId);
-
-socket.on(`/deployments/${initialDeploymentId}`, (msg) => {
-  console.log('msg', msg);
-  //console.log(`MSG: ${JSON.stringify(msg)}`);
-});
 
 const store = createStore(
   rootReducer(initialDeploymentId),
   applyMiddleware(
-    promiseMiddleware(), loggerMiddleware())
+    promiseMiddleware(), socketMiddleware(socket), loggerMiddleware())
 );
 
 const app =

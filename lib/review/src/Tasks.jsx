@@ -1,47 +1,31 @@
 import * as React from 'react';
-import {
-  Row,
-  Col
-} from 'react-bootstrap';
+import TaskBarNew from './TaskBarNew';
+import TaskBarStarted from './TaskBarStarted';
+import TaskBarDone from './TaskBarDone';
 
 class Tasks extends React.Component {
   render() {
+    const { deploymentSteps } = this.props;
+    const renderedSteps = deploymentSteps.map((ds, idx) => {
+      let task;
+      switch(ds.progress) {
+        case 0:
+          task = <TaskBarNew key={idx} deploymentStep={ds}/>
+          break;
+        case 1:
+          task = <TaskBarDone key={idx} deploymentStep={ds}/>
+          break;
+        default:
+          task = <TaskBarStarted key={idx} deploymentStep={ds} />
+      }
+      return task;
+    });
+
     return (
       <div>
-        <div className="progress-description">
-          <span className="pficon pficon-ok"></span> <strong>Network Activity:</strong>  10.10.121.02
-        </div>
-        <div className="progress progress-label-top-right">
-          <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{width: '100%'}}>
-            <span>100%</span>
-          </div>
-        </div>
-
-        <div className="progress-description">
-          <span className="pficon pficon-ok"></span> <strong>Network Activity:</strong>  10.10.121.02
-        </div>
-        <div className="progress progress-label-top-right">
-          <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{width: '100%'}}>
-            <span>100%</span>
-          </div>
-        </div>
-
-        <div className="progress-description">
-          <div className="spinner spinner-xs spinner-inline"></div> <strong>Downloading:</strong>  Product Repositories
-        </div>
-        <div className="progress progress-label-top-right">
-          <div className="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style={{width: '80%'}}>
-            <span>80.0% (35 of 82MB)</span>
-          </div>
-        </div>
-
-        <div className="progress-description">
-          <div className="spinner spinner-xs spinner-inline"></div> <strong>Downloading:</strong>  Product Repositories
-        </div>
-        <div className="progress progress-label-top-right">
-          <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: '0%'}}>
-            <span>0% (0 of 82MB)</span>
-          </div>
+        <h3>Tasks</h3>
+        <div>
+          {renderedSteps}
         </div>
       </div>
     );

@@ -26,8 +26,6 @@ router.post('/:id/execute', function(req, res, next) {
   const executor = new DeploymentExecutor(io);
 
   Deployment.find(req.params.id).then(deployment => {
-    console.log('executing...', deployment._id);
-
     const runningDeployment = executor.executeDeployment(deployment);
     if(!runningDeployment) {
       throw { error: 'Something went wrong starting the deployment.' };
@@ -35,6 +33,22 @@ router.post('/:id/execute', function(req, res, next) {
 
     res.status(201);
     res.json({deployment: runningDeployment})
+  }).catch(error => {
+    return res.status(500).send(JSON.stringify(error));
+  })
+});
+
+router.post('/:id/reset', function(req, res, next) {
+  const io = require('../socket-client').getConnection();
+  const executor = new DeploymentExecutor(io);
+
+  Deployment.find(req.params.id).then(deployment => {
+    deployment.steps = deployment.steps.map(step => Object.assign(step, {progress: 0}));
+    deployment.status = 'new';
+    return Deployment.update(deployment._id, deployment).then(result => {
+      res.status(200);
+      res.json({deployment})
+    });
   }).catch(error => {
     return res.status(500).send(JSON.stringify(error));
   })
@@ -89,7 +103,7 @@ router.post('/:id/steps', function(req, res, next) {
     if (!deployment.steps) {
       deployment.steps  = [];
     }
-    deployment.steps.push({type: 'unspecified'});
+    deployment.steps.push({type: 'unspecified', progress: 0});
     return new Promise((resolve, reject) => {
       Deployment.update(deployment._id, deployment).then(result => {
         let step = deployment.steps[deployment.steps.length - 1];
