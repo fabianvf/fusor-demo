@@ -7,6 +7,7 @@
     "live": "browser-sync start --proxy 'localhost:3000' --reload-delay 1000 --files './**/*.hbs,./**/*.js,./**/*.css'"
   },
   "dependencies": {
+    "async": "^2.0.1",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
@@ -17,7 +18,8 @@
     "mongojs": "^2.4.0",
     "morgan": "~1.7.0",
     "patternfly": "^3.9.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "browser-sync": "^2.14.0",

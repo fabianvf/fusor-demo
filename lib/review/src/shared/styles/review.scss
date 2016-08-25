@@ -1,0 +1,22 @@
+@import 'config/colors';
+
+.bold {
+  font-weight: bold;
+}
+
+.review-client-app h1 {
+  background-color: lime;
+  color: black;
+  border: 20px solid black;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+button.execute {
+  margin-top: 0px;
+}
+
+button.reset{
+  margin-top: 0px;
+}

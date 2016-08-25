@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Deployment = require('../data').Deployment;
+const DeploymentExecutor = require('../lib/deployment-executor');
 
 router.get('/:id/review', function(req, res, next) {
   Deployment.find(req.params.id).then(deployment => {
@@ -13,7 +14,40 @@ router.get('/:id/review', function(req, res, next) {
       deploymentName: deployment.name || 'New Deployment',
       deployment: deployment,
       formattedSteps: formattedSteps,
-      scripts: ['tabs.js']
+      scripts: ['tabs.js', 'review.js']
+    });
+  }).catch(error => {
+    return res.status(500).send(JSON.stringify(error));
+  })
+});
+
+router.post('/:id/execute', function(req, res, next) {
+  const io = require('../socket-client').getConnection();
+  const executor = new DeploymentExecutor(io);
+
+  Deployment.find(req.params.id).then(deployment => {
+    const runningDeployment = executor.executeDeployment(deployment);
+    if(!runningDeployment) {
+      throw { error: 'Something went wrong starting the deployment.' };
+    }
+
+    res.status(201);
+    res.json({deployment: runningDeployment})
+  }).catch(error => {
+    return res.status(500).send(JSON.stringify(error));
+  })
+});
+
+router.post('/:id/reset', function(req, res, next) {
+  const io = require('../socket-client').getConnection();
+  const executor = new DeploymentExecutor(io);
+
+  Deployment.find(req.params.id).then(deployment => {
+    deployment.steps = deployment.steps.map(step => Object.assign(step, {progress: 0}));
+    deployment.status = 'new';
+    return Deployment.update(deployment._id, deployment).then(result => {
+      res.status(200);
+      res.json({deployment})
     });
   }).catch(error => {
     return res.status(500).send(JSON.stringify(error));
@@ -36,6 +70,7 @@ router.get('/:id/steps/:humanStepIndex', function(req, res, next) {
     return res.render('deployments/steps/show', {
       isUnspecified: !currentStep.type || currentStep.type === 'unspecified',
       deploymentName: deployment.name || 'New Deployment',
+
       deployment: deployment,
       formattedSteps: formattedSteps,
       currentStep: currentStep,
@@ -68,7 +103,7 @@ router.post('/:id/steps', function(req, res, next) {
     if (!deployment.steps) {
       deployment.steps  = [];
     }
-    deployment.steps.push({type: 'unspecified'});
+    deployment.steps.push({type: 'unspecified', progress: 0});
     return new Promise((resolve, reject) => {
       Deployment.update(deployment._id, deployment).then(result => {
         let step = deployment.steps[deployment.steps.length - 1];

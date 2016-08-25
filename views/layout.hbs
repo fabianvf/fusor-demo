@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="/vendor/patternfly/css/patternfly.min.css">
     <link rel="stylesheet" href="/vendor/patternfly/css/patternfly-additions.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js" defer></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js" defer></script>
+    <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js" defer></script>
     {{#each scripts as |script|}}
-      <script src="/javascripts/{{script}}"></script>
+      <script src="/javascripts/{{script}}" defer></script>
     {{/each}}
   </head>
   <body>
