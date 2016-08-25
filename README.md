@@ -25,3 +25,5 @@ and build and run the main app
 npm install
 npm start
 ```
+
+navigate to [http://localhost:3000](http://localhost:3000)
