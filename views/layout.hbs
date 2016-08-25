@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="/vendor/patternfly/css/patternfly.min.css">
     <link rel="stylesheet" href="/vendor/patternfly/css/patternfly-additions.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    {{#each styles as |style|}}
+      <link rel='stylesheet' href='/stylesheets/{{style}}' />
+    {{/each}}
+    {{#if fusorVars}}
+      <script type="text/javascript">
+        window.fusor = {{{fusorVars}}};
+      </script>
+    {{/if}}
     <script src="/vendor/jquery/jquery.min.js" defer></script>
     <script src="/vendor/bootstrap/js/bootstrap.min.js" defer></script>
     <script src="/vendor/bootstrap-select/js/bootstrap-select.min.js" defer></script>
