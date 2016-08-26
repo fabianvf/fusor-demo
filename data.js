@@ -59,6 +59,19 @@ class DataObject {
         })
     });
   }
+
+  remove(id) {
+    return new Promise((resolve, reject) => {
+      this.data.remove(
+        {_id: mongojs.ObjectId(id)},
+        (err, document) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(document);
+        })
+    });
+  }
 }
 
 const Deployment = new DataObject(db.Deployments);

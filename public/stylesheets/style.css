@@ -11,7 +11,19 @@
   margin-top: 20px;
 }
 
+.step-title {
+  margin-bottom: 24px;
+}
+
 .deployment-step-tabs {
   margin-top: 24px;
   margin-bottom: 24px;
 }
+
+.delete-step-icon {
+  font-size: 14px;
+  font-style: normal;
+  margin-left: 24px;
+  cursor: pointer;
+}
+

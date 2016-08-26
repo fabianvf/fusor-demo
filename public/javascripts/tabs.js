@@ -7,7 +7,7 @@ $(document).ready(function () {
       url: url,
       dataType: "json",
       success: function (response) {
-        window.location.href = url + '/' + response.step.humanIndex;
+        window.location.replace(url + '/' + response.step.humanIndex);
       },
       error: function (error) {
         console.log('error adding step', error);

@@ -19,15 +19,20 @@
         <th>Deployment Name</th>
         <th>Products</th>
         <th>Status</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
       {{#each deployments as |deployment|}}
         <tr>
           <td><a href="/deployments/{{deployment._id}}">{{deployment._id}}</a></td>
-          <td>{{deployment.name}}</td>
+          <td><a href="/deployments/{{deployment._id}}">{{deployment.name}}</a></td>
           <td>{{deployment.products}}</td>
           <td>{{deployment.status}}</td>
+          <td>
+            <a class="btn btn-default" href="/deployments/{{deployment._id}}"><span class="pficon pficon-edit"></span></a>
+            <button class="btn btn-danger delete-deployment-button" data-deployment-link="/deployments/{{deployment._id}}"><span class="pficon pficon-delete"></span></button>
+          </td>
         </tr>
       {{/each}}
       </tbody>

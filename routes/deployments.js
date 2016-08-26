@@ -119,6 +119,20 @@ router.put('/:id/steps/:humanStepIndex', function(req, res, next) {
   })
 });
 
+router.delete('/:id/steps/:humanStepIndex', function(req, res, next) {
+  const deploymentId = req.params.id;
+  const humanStepIndex = parseInt(req.params.humanStepIndex, 10);
+  Deployment.find(req.params.id).then((deployment) => {
+    deployment.steps.splice(humanStepIndex - 1, 1);
+    return Deployment.update(deploymentId, deployment);
+  }).then(result => {
+    return res.status(200).send({});
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).send(JSON.stringify(error));
+  })
+});
+
 router.post('/:id/steps', function(req, res, next) {
   //TODO break out the steps into it's own collection and use Mongoose.
   Deployment.find(req.params.id).then(deployment => {
@@ -180,9 +194,20 @@ router.put('/:id', function(req, res, next){
   });
 });
 
+router.delete('/:id', function(req, res, next){
+  let deploymentId = req.params.id;
+  Deployment.remove(deploymentId).then(result => {
+    return res.status(200).send({});
+  }).catch(error => {
+    console.log(error);
+    return res.status(500).send({error: JSON.stringify(error)});
+  });
+});
+
 router.get('/', function(req, res, next) {
   Deployment.find().then(deployments => {
-    return res.render('deployments/index', {deployments});
+    let scripts = ['deployments.js'];
+    return res.render('deployments/index', {scripts, deployments});
   }).catch(error => {
     console.log(error);
     return res.status(500).send({error: JSON.stringify(error)});
