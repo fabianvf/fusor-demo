@@ -24,7 +24,8 @@ class ReviewDetails extends React.Component {
           content={deployment.status}
         />
 
-        {deployment.steps.map(step => <ReviewDetail
+        {deployment.steps.map((step, index) => <ReviewDetail
+          key={index}
           label="Step Type"
           content={step.type}
         />)}

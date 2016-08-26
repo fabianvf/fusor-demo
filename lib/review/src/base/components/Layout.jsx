@@ -60,7 +60,7 @@ class Layout extends React.Component {
               if(deployment.status === 'new') {
                 return <Button className="execute" bsSize="large" bsStyle="primary" onClick={execCurry}>Execute</Button>
               } else if(deployment.status === 'done')
-                return <Button className="reset" bsSize="large" bsStyle="secondary" onClick={resetCurry}>Reset</Button>
+                return <Button className="reset" bsSize="large" bsStyle="default" onClick={resetCurry}>Reset</Button>
             })()}
 
           </Col>
