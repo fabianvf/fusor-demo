@@ -78,17 +78,18 @@ router.get('/:id/steps/:humanStepIndex', function(req, res, next) {
     scripts.push(`/deployments/steps/${currentStep.type}-client.js`);
     styles.push(`/deployments/steps/${currentStep.type}-client.css`);
     let formattedSteps = deployment.steps.map((step, index) => formatStep(step, index, deployment, humanStepIndex));
+    let deploymentPath = `/deployments/${req.params.id}`;
+    let stepPath = `/deployments/${req.params.id}/steps/${req.params.humanStepIndex}`;
     let preInstallState = calculatePreInstallState(deployment, stepIndex);
     let options = currentStep.options;
     let postInstallState = calculatePostInstallState(deployment, stepIndex);
     let validation = validate(deployment, stepIndex, preInstallState);
 
-    let fusorVars = { preInstallState, options,  postInstallState, validation };
+    let fusorVars = {deploymentPath, stepPath, preInstallState, options,  postInstallState, validation };
 
     return res.render('deployments/steps/show', {
       isUnspecified: !currentStep.type || currentStep.type === 'unspecified',
       deploymentName: deployment.name || 'New Deployment',
-
       deployment: deployment,
       formattedSteps: formattedSteps,
       currentStep: currentStep,
