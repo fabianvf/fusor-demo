@@ -1,5 +1,11 @@
 # fusor-demo
 
+Install and start mongodb-server
+```
+sudo dnf install mongodb-server
+sudo systemctl start mongodb.service
+```
+
 Install node.js version 6.4.
 [nvm](https://github.com/creationix/nvm) is one easy way to accomplish this:
 ```
