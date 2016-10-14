@@ -3,7 +3,7 @@
 Install and start mongodb-server
 ```
 sudo dnf install mongodb-server
-sudo systemctl start mongodb.service
+sudo systemctl start mongod.service
 ```
 
 Install node.js version 6.4.
